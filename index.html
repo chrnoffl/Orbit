@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="#0b0d12" name="theme-color"/>
+  <link href="icon.png" rel="icon" type="image/png"/>
+  <title>
+   Orbit
+  </title>
+  <style>
+
+:root{color-scheme:light;
+--bg:#ffffff;
+--panel:#ffffff;
+--panel2:#f7f6ff;
+--line:#e7e5f1;
+--text:#202039;
+--muted:#77758f;
+--accent:#7955ed;
+--accent2:#a48cff;
+--green:#168b68;
+--yellow:#a66a08;
+--red:#d83d69;
+--blue:#287fca;
+--shadow-dark:#deddea;
+--shadow-light:#ffffff;
+}
+*{box-sizing:border-box}
+body{margin:0;
+background:#fff;
+color:var(--text);
+font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:grid;
+grid-template-columns:226px minmax(0,1fr);
+min-height:100vh;
+background:#fff}
+.sidebar{padding:25px 15px;
+border-right:1px solid #efedf7;
+background:#fff;
+display:flex;
+flex-direction:column;
+gap:28px;
+position:sticky;
+top:0;
+height:100vh;
+min-height:0;
+overflow-y:auto;
+align-self:start}
+.brand{display:flex;
+align-items:center;
+gap:7px;
+padding:0 10px;
+font-size:18px;
+font-weight:800;
+letter-spacing:-.5px;
+color:#25223b}
+.brand-mark{display:grid;
+place-items:center;
+width:34px;
+height:34px;
+border-radius:11px;
+background:#f2efff;
+color:var(--accent);
+font-weight:900;
+overflow:hidden;
+flex:0 0 34px;
+box-shadow:none}
+.brand-dot{color:var(--accent);
+margin-left:-4px}
+.brand-mark img{width:100%;
+height:100%;
+object-fit:contain}
+.brand-mark .icon-fallback{display:none;
+place-items:center;
+width:100%;
+height:100%}
+.header-logo-placeholder{display:none;
+width:220px;
+height:58px;
+align-items:center;
+justify-content:flex-end;
+flex:0 1 220px}
+.header-logo-placeholder img{display:none;
+max-width:100%;
+max-height:58px;
+object-fit:contain}
+.header-logo-placeholder .logo-fallback{display:flex;
+align-items:center;
+gap:8px;
+border:1px dashed #d8d2f0;
+border-radius:14px;
+padding:10px 14px;
+color:var(--muted);
+font-size:11px;
+letter-spacing:.4px;
+background:#faf9ff}
+.header-logo-placeholder .logo-fallback strong{color:var(--text);
+font-size:15px;
+letter-spacing:-.3px}
+.top-actions{display:flex;
+gap:9px;
+align-items:center}
+.eyebrow{color:#9995ad;
+font-size:10px;
+font-weight:800;
+letter-spacing:1.5px;
+text-transform:uppercase;
+padding:0 12px;
+margin-bottom:8px}
+.nav{display:grid;
+gap:8px}
+.nav button{background:transparent;
+border:1px solid transparent;
+color:#696780;
+text-align:left;
+border-radius:13px;
+padding:11px 12px;
+display:flex;
+align-items:center;
+gap:12px;
+transition:background .18s,border-color .18s,color .18s,box-shadow .18s}
+.nav button.active,.nav button:hover{background:#eee9ff;
+border-color:#e0d8ff;
+color:#6846df;
+box-shadow:4px 4px 9px #e2dfef,-4px -4px 9px #fff}
+.ico{width:18px;
+text-align:center;
+font-size:16px}
+.side-note{margin-top:auto;
+border:1px solid #ece9fa;
+background:#f7f5ff;
+padding:14px;
+border-radius:17px;
+color:#77738f;
+font-size:12px;
+box-shadow:6px 6px 14px #e7e4f1,-5px -5px 12px #fff}
+.side-note strong{display:block;
+color:#302b4a;
+margin-bottom:5px}
+.main{min-width:0;
+padding:27px clamp(15px,3vw,42px) 50px;
+max-width:1600px;
+width:100%;
+margin:auto;
+background:#fff}
+.topbar{display:flex;
+align-items:center;
+justify-content:space-between;
+gap:16px;
+margin-bottom:28px}
+.kicker{font-size:12px;
+color:var(--muted)}
+h1{font-size:clamp(24px,3vw,34px);
+line-height:1.15;
+letter-spacing:-1.1px;
+margin:4px 0 0;
+color:#24213d}
+.date-chip,.btn,.field,select,textarea{border:1px solid #e7e3f5;
+background:#fff;
+color:var(--text);
+border-radius:13px;
+padding:10px 12px}
+.btn{font-weight:650;
+transition:transform .16s,border-color .16s,box-shadow .16s,background .16s}
+.btn:hover{border-color:#bdb0fa;
+transform:translateY(-1px)}
+.btn.primary{background:#7955ed;
+color:#fff;
+border-color:#7955ed;
+box-shadow:4px 4px 9px #ddd6fa,-3px -3px 8px #fff}
+.btn.primary:hover{background:#6845df;
+box-shadow:0 0 0 3px #7955ed20}
+.btn.subtle{background:#f6f4ff;
+border-color:#e8e2ff;
+color:#5f4ca7;
+box-shadow:4px 4px 9px #e6e2f1,-3px -3px 8px #fff}
+.btn.danger{color:#c83c61;
+background:#fff3f6;
+border-color:#ffe0e8}
+.btn:disabled{opacity:.45;
+cursor:not-allowed}
+.grid{display:grid;
+gap:16px}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));
+margin-bottom:18px}
+.card{background:#fff;
+border:1px solid #eeebf8;
+border-radius:20px;
+padding:18px;
+min-width:0;
+box-shadow:7px 7px 16px #e7e4f1,-6px -6px 14px #fff}
+.stat-label{font-size:12px;
+color:#77738f;
+display:flex;
+justify-content:space-between;
+gap:8px}
+.stat-value{font-size:29px;
+font-weight:750;
+letter-spacing:-1px;
+margin:8px 0 4px;
+color:#27233f}
+.stat-foot{font-size:11px;
+color:#88849f}
+.stats .card:nth-child(1){background:#f3efff;
+border-color:#e9e1ff}
+.stats .card:nth-child(2){background:#fff0f7;
+border-color:#ffe1ef}
+.stats .card:nth-child(3){background:#edf7ff;
+border-color:#dceeff}
+.stats .card:nth-child(4){background:#fff5e8;
+border-color:#ffead1}
+.accent{color:var(--accent)}
+.green{color:var(--green)}
+.yellow{color:var(--yellow)}
+.red{color:var(--red)}
+.section-head{display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+margin:0 0 14px}
+.section-head h2{font-size:16px;
+letter-spacing:-.3px;
+margin:0;
+color:#2c2847}
+.section-head p{color:var(--muted);
+font-size:12px;
+margin:3px 0 0}
+.two-col{grid-template-columns:minmax(0,1.2fr) minmax(290px,.8fr)}
+.list{display:grid;
+gap:9px}
+.row-item{display:flex;
+align-items:center;
+gap:12px;
+border:1px solid #eeebf8;
+background:#fff;
+padding:12px;
+border-radius:15px;
+min-width:0;
+box-shadow:4px 4px 9px #e9e6f2,-3px -3px 8px #fff}
+.dot{width:5px;
+height:38px;
+border-radius:8px;
+background:var(--accent);
+flex-shrink:0}
+.item-main{min-width:0;
+flex:1}
+.item-main strong{display:block;
+font-size:13px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+color:#302c49}
+.item-main small{color:var(--muted);
+font-size:11px}
+.tag{font-size:10px;
+border-radius:8px;
+padding:4px 7px;
+background:#f0ebff;
+color:#6d4bdd;
+white-space:nowrap;
+border:1px solid #e2d9ff}
+.tag.green{background:#e5f8f0;
+color:#16845f;
+border-color:#c9efdf}
+.tag.yellow{background:#fff3d9;
+color:#99620a;
+border-color:#ffe5ae}
+.tag.red{background:#fff0f4;
+color:#cb3e65;
+border-color:#ffd8e3}
+.empty{padding:24px;
+text-align:center;
+color:var(--muted);
+border:1px dashed #dcd7ee;
+border-radius:14px;
+background:#fcfbff}
+.progress{height:7px;
+background:#e9e6f4;
+border-radius:20px;
+overflow:hidden;
+margin-top:9px;
+box-shadow:inset 2px 2px 4px #dedbea}
+.progress span{display:block;
+height:100%;
+background:linear-gradient(90deg,#8d6cf4,#c2a7ff);
+border-radius:20px}
+.subject-list{display:grid;
+gap:14px}
+.subject-line{display:grid;
+grid-template-columns:minmax(0,1fr) auto;
+gap:8px}
+.subject-line strong{font-size:12px}
+.subject-line small{color:var(--muted)}
+.subject-line .pct{font-weight:750;
+font-size:12px}
+.tabs{display:flex;
+gap:6px;
+flex-wrap:wrap;
+margin-bottom:18px}
+.tabs button{border:1px solid #e7e3f5;
+background:#fff;
+color:#77738f;
+padding:9px 12px;
+border-radius:11px}
+.tabs button.active{background:#eee9ff;
+border-color:#dcd2ff;
+color:#6846df;
+box-shadow:inset 2px 2px 4px #e2def0,inset -2px -2px 4px #fff}
+.view{display:none}
+.view.active{display:block}
+.toolbar{display:flex;
+gap:9px;
+flex-wrap:wrap;
+align-items:center;
+margin-bottom:14px}
+.toolbar input,.toolbar select{min-width:150px}
+.table-wrap{overflow:auto;
+border:1px solid #e9e5f4;
+border-radius:14px;
+box-shadow:4px 4px 9px #eeebf5,-3px -3px 8px #fff}
+table{width:100%;
+border-collapse:collapse;
+min-width:590px}
+th,td{text-align:left;
+padding:12px;
+border-bottom:1px solid #efedf7;
+font-size:12px}
+th{color:#77738f;
+font-size:10px;
+text-transform:uppercase;
+letter-spacing:.8px;
+background:#f8f7ff}
+tr:last-child td{border-bottom:0}
+.status-buttons{display:flex;
+gap:5px}
+.status-buttons button{border:1px solid #e7e3f3;
+background:#f8f7fc;
+color:#77738f;
+border-radius:9px;
+padding:6px 8px;
+font-size:11px}
+.status-buttons button.chosen.present{background:#e5f8f0;
+border-color:#bcebd8;
+color:#16845f}
+.status-buttons button.chosen.absent{background:#fff0f4;
+border-color:#ffd5e1;
+color:#cb3e65}
+.status-buttons button.chosen.od{background:#eaf6ff;
+border-color:#cfeaff;
+color:#287fca}
+.form-grid{display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:12px}
+.form-grid label{display:grid;
+gap:6px;
+font-size:11px;
+color:#77738f}
+.form-grid input,.form-grid select,.form-grid textarea{width:100%;
+min-width:0;
+background:#fff;
+color:var(--text);
+border:1px solid #e5e0f2;
+border-radius:12px;
+padding:10px 12px;
+outline:none;
+box-shadow:inset 2px 2px 4px #efedf6,inset -2px -2px 4px #fff;
+accent-color:var(--accent)}
+.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{border-color:var(--accent);
+box-shadow:0 0 0 3px #7955ed20}
+.form-grid input[type=time],.form-grid input[type=date],.form-grid input[type=month]{color-scheme:light}
+.form-grid select option{background:#fff;
+color:var(--text)}
+dialog::backdrop{background:#27213b55;
+backdrop-filter:blur(4px)}
+dialog{color-scheme:light;
+background:#fff!important;
+color:var(--text);
+border:1px solid #e9e4f5!important;
+border-radius:20px!important;
+box-shadow:12px 12px 28px #d9d4e8,-8px -8px 22px #fff!important}
+.monthly-danger{border-color:#ffd5e1!important;
+background:#fff2f5!important}
+.monthly-warning{border-color:#ffe6b8!important;
+background:#fff8e9!important}
+.risk-icon{display:inline-grid;
+place-items:center;
+width:22px;
+height:22px;
+border-radius:8px;
+margin-right:6px;
+font-weight:900}
+.risk-icon.danger{background:#ffe4eb;
+color:var(--red)}
+.risk-icon.warning{background:#fff0c9;
+color:var(--yellow)}
+.risk-icon.safe{background:#ddf7eb;
+color:var(--green)}
+.form-grid .full{grid-column:1/-1}
+.form-actions{display:flex;
+justify-content:flex-end;
+gap:8px;
+margin-top:15px}
+.weekday{display:grid;
+grid-template-columns:repeat(7,minmax(100px,1fr));
+gap:8px;
+overflow:auto;
+padding-bottom:5px}
+.day-col{background:#fbfaff;
+border:1px solid #ebe7f7;
+border-radius:15px;
+padding:9px;
+min-height:130px;
+box-shadow:4px 4px 9px #e9e6f2,-3px -3px 8px #fff}
+.day-col h3{font-size:11px;
+color:var(--muted);
+margin:2px 0 10px}
+.class-chip{font-size:10px;
+background:#f0ebff;
+color:#6048b1;
+padding:7px;
+border-radius:9px;
+margin-bottom:6px;
+overflow-wrap:anywhere;
+border:1px solid #e3d9ff}
+.class-chip small{display:block;
+color:#8879bc;
+margin-top:3px}
+.sidebar-credit{margin-top:0;
+padding:16px 10px 4px;
+border-top:1px solid #efedf7;
+color:var(--muted);
+font-size:11px;
+line-height:1.7}
+.sidebar-credit span{color:#e879a5}
+.sidebar-credit strong{color:var(--text);
+font-weight:700}
+.mobile-nav{display:none}
+.notice{padding:11px 13px;
+background:#f3efff;
+border:1px solid #e2d8ff;
+border-radius:13px;
+color:#5f4ca7;
+font-size:12px;
+margin-bottom:16px}
+.hidden{display:none!important}
+.footer-note{color:var(--muted);
+font-size:11px;
+margin-top:16px}
+.toast{position:fixed;
+bottom:20px;
+right:20px;
+background:#7955ed;
+color:#fff;
+padding:12px 16px;
+border-radius:13px;
+box-shadow:5px 5px 12px #dcd6ef,-3px -3px 8px #fff;
+z-index:10;
+font-weight:700;
+opacity:0;
+transform:translateY(10px);
+transition:.2s;
+pointer-events:none}
+.toast.show{opacity:1;
+transform:none}
+.sync-status{font-size:11px;
+color:var(--muted);
+display:flex;
+gap:7px;
+align-items:center}
+.sync-dot{width:7px;
+height:7px;
+border-radius:100%;
+background:var(--yellow)}
+.sync-dot.ok{background:var(--green)}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.two-col{grid-template-columns:1fr}
+.app{grid-template-columns:190px minmax(0,1fr)}
+.sidebar{padding-inline:10px}
+}
+@media(max-width:680px){.app{display:block}
+.sidebar{display:none}
+.main{padding:18px 13px 88px}
+.topbar{align-items:flex-start;
+margin-bottom:20px}
+.top-actions{flex-direction:column;
+align-items:stretch}
+.date-chip{display:none}
+.stats{gap:9px}
+.card{padding:14px}
+.stat-value{font-size:25px}
+.two-col{grid-template-columns:1fr}
+.mobile-nav{display:grid;
+grid-template-columns:repeat(5,1fr);
+position:fixed;
+z-index:5;
+bottom:0;
+left:0;
+right:0;
+background:#fff;
+border-top:1px solid #ebe7f5;
+padding:8px 5px calc(8px + env(safe-area-inset-bottom));
+gap:3px;
+box-shadow:0 -5px 14px #e9e6f2}
+.mobile-nav button{border:0;
+background:transparent;
+color:var(--muted);
+font-size:10px;
+padding:6px 2px;
+display:grid;
+gap:3px;
+justify-items:center}
+.mobile-nav button.active{color:var(--accent)}
+.mobile-nav .ico{font-size:17px}
+.form-grid{grid-template-columns:1fr}
+.form-grid .full{grid-column:auto}
+.section-head{align-items:flex-start}
+.toolbar>*{flex:1}
+.toolbar input,.toolbar select{min-width:120px}
+.weekday{grid-template-columns:repeat(7,112px)}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;
+transition:none!important}
+}
+.sidebar-brand-row{display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+padding:0 10px}
+.sidebar-brand-row .brand{padding:0;
+gap:7px;
+min-width:0}
+.theme-toggle{flex:0 0 36px;
+width:36px;
+height:36px;
+display:grid;
+place-items:center;
+padding:0;
+border:1px solid #e7e0fa;
+border-radius:12px;
+background:#fff;
+color:#7650e8;
+box-shadow:0 4px 0 #e4dafb,0 7px 14px #4b347b16;
+transition:transform .16s,background .16s,border-color .16s;
+line-height:1}
+.theme-toggle:hover{transform:translateY(-1px)}
+.theme-toggle-icon{display:grid;
+place-items:center;
+width:100%;
+height:100%;
+border-radius:11px;
+background:#f5f1ff;
+color:#7650e8;
+font-size:17px}
+.theme-toggle:focus-visible{outline:3px solid #9c83ff;
+outline-offset:3px}
+body[data-theme="dark"]{color-scheme:dark;
+--bg:#17151f;
+--panel:#211e2b;
+--panel2:#292438;
+--line:#393348;
+--text:#f1edff;
+--muted:#aaa3c2;
+--accent:#a48aff;
+--accent2:#c0adff;
+--green:#63d5ad;
+--yellow:#f4c46e;
+--red:#ff8da8;
+--blue:#7fc7ff;
+background:#17151f;
+color:var(--text)}
+body[data-theme="dark"] .app,body[data-theme="dark"] .main{background:#17151f}
+body[data-theme="dark"] .sidebar{background:#1d1a27;
+border-color:#373044}
+body[data-theme="dark"] .brand{color:#f4f0ff}
+body[data-theme="dark"] .brand-mark{background:#302744;
+color:#b8a4ff;
+box-shadow:0 4px 0 #181520,0 8px 15px #0003}
+body[data-theme="dark"] .brand-dot{color:#b8a4ff}
+body[data-theme="dark"] .eyebrow{color:#a49bbd}
+body[data-theme="dark"] .nav button{color:#b7b0cc}
+body[data-theme="dark"] .nav button.active,body[data-theme="dark"] .nav button:hover{background:#302744;
+border-color:#51416e;
+color:#c4b2ff;
+box-shadow:0 4px 0 #17141e,0 8px 15px #0003}
+body[data-theme="dark"] .theme-toggle{background:#302744;
+border-color:#51416e;
+color:#ffe09a;
+box-shadow:0 4px 0 #17141e,0 8px 14px #0003}
+body[data-theme="dark"] .theme-toggle-icon{background:#413454;
+color:#ffe09a}
+body[data-theme="dark"] .side-note{background:#292438;
+border-color:#3c334e;
+color:#b2aac8;
+box-shadow:0 5px 0 #17141e,0 10px 18px #0003}
+body[data-theme="dark"] .side-note strong,body[data-theme="dark"] .sidebar-credit strong{color:#f0eaff}
+body[data-theme="dark"] .sidebar-credit{border-color:#393348;
+color:#aaa3c2}
+body[data-theme="dark"] h1,body[data-theme="dark"] .section-head h2{color:#f1edff}
+body[data-theme="dark"] .kicker,body[data-theme="dark"] .stat-label,body[data-theme="dark"] .stat-foot,body[data-theme="dark"] .item-main small,body[data-theme="dark"] .subject-line small{color:#aaa3c2}
+body[data-theme="dark"] .card{background:#211e2b;
+border-color:#393348;
+box-shadow:0 6px 0 #17141e,0 13px 24px #0003,inset 0 1px 0 #393348}
+body[data-theme="dark"] .stats .card:nth-child(1){background:#302744;
+border-color:#493a64}
+body[data-theme="dark"] .stats .card:nth-child(2){background:#382532;
+border-color:#543347}
+body[data-theme="dark"] .stats .card:nth-child(3){background:#202f40;
+border-color:#30465c}
+body[data-theme="dark"] .stats .card:nth-child(4){background:#3a2d20;
+border-color:#59432b}
+body[data-theme="dark"] .stat-value,body[data-theme="dark"] .item-main strong{color:#f4f0ff}
+body[data-theme="dark"] .btn,body[data-theme="dark"] .date-chip,body[data-theme="dark"] .field,body[data-theme="dark"] select,body[data-theme="dark"] textarea{background:#292536;
+border-color:#423a55;
+color:#f1edff}
+body[data-theme="dark"] .btn.primary{background:#7955ed;
+border-color:#8b6bf3;
+color:#fff;
+box-shadow:0 4px 0 #4c358d,0 9px 16px #0003}
+body[data-theme="dark"] .btn.subtle{background:#302744;
+border-color:#4a3b65;
+color:#d0c1ff;
+box-shadow:0 4px 0 #17141e,0 8px 14px #0003}
+body[data-theme="dark"] .btn.danger{background:#3a222d;
+border-color:#603448;
+color:#ff9ab3}
+body[data-theme="dark"] .row-item{background:#272332;
+border-color:#3c354c;
+box-shadow:0 4px 0 #17141e,0 8px 14px #0003,inset 0 1px 0 #393348}
+body[data-theme="dark"] .tag{background:#382d50;
+border-color:#51416f;
+color:#c9b8ff}
+body[data-theme="dark"] .tag.green{background:#203c35;
+border-color:#315c4d;
+color:#82e2bf}
+body[data-theme="dark"] .tag.yellow{background:#423522;
+border-color:#67502d;
+color:#f5cd80}
+body[data-theme="dark"] .tag.red{background:#432633;
+border-color:#693747;
+color:#ff9ab3}
+body[data-theme="dark"] .empty{background:#252131;
+border-color:#49405e;
+color:#b6aecb}
+body[data-theme="dark"] .progress{background:#3a3449;
+box-shadow:inset 0 2px 4px #17141e}
+body[data-theme="dark"] .tabs button{background:#292536;
+border-color:#423a55;
+color:#b8b0ce}
+body[data-theme="dark"] .tabs button.active{background:#382d50;
+border-color:#59487b;
+color:#d0c1ff;
+box-shadow:0 3px 0 #17141e}
+body[data-theme="dark"] .table-wrap{border-color:#3c354c;
+box-shadow:0 5px 0 #17141e,0 9px 18px #0003}
+body[data-theme="dark"] th{background:#302a40;
+color:#bcb3d4}
+body[data-theme="dark"] td,body[data-theme="dark"] th{border-color:#393348}
+body[data-theme="dark"] .status-buttons button{background:#302b3b;
+border-color:#494158;
+color:#c1b9d5}
+body[data-theme="dark"] .status-buttons button.chosen.present{background:#203c35;
+border-color:#315c4d;
+color:#82e2bf}
+body[data-theme="dark"] .status-buttons button.chosen.absent{background:#432633;
+border-color:#693747;
+color:#ff9ab3}
+body[data-theme="dark"] .status-buttons button.chosen.od{background:#203346;
+border-color:#34536d;
+color:#8dcfff}
+body[data-theme="dark"] .form-grid label{color:#b8b0ce}
+body[data-theme="dark"] .form-grid input,body[data-theme="dark"] .form-grid select,body[data-theme="dark"] .form-grid textarea{background:#292536;
+color:#f1edff;
+border-color:#423a55;
+box-shadow:inset 0 2px 4px #17141e}
+body[data-theme="dark"] .form-grid input[type=time],body[data-theme="dark"] .form-grid input[type=date],body[data-theme="dark"] .form-grid input[type=month]{color-scheme:dark}
+body[data-theme="dark"] .form-grid select option{background:#292536;
+color:#f1edff}
+body[data-theme="dark"] dialog{color-scheme:dark;
+background:#211e2b!important;
+color:#f1edff;
+border-color:#393348!important;
+box-shadow:0 8px 0 #14121a,0 24px 60px #0008!important}
+body[data-theme="dark"] dialog .btn,body[data-theme="dark"] dialog input,body[data-theme="dark"] dialog select,body[data-theme="dark"] dialog textarea{background:#292536;
+color:#f1edff;
+border-color:#423a55}
+body[data-theme="dark"] .monthly-danger{background:#3a222d!important;
+border-color:#603448!important}
+body[data-theme="dark"] .monthly-warning{background:#423522!important;
+border-color:#67502d!important}
+body[data-theme="dark"] .risk-icon.danger{background:#542b3b;
+color:#ff9ab3}
+body[data-theme="dark"] .risk-icon.warning{background:#59462a;
+color:#f5cd80}
+body[data-theme="dark"] .risk-icon.safe{background:#24483c;
+color:#82e2bf}
+body[data-theme="dark"] .notice{background:#302744;
+border-color:#51416e;
+color:#d0c1ff}
+body[data-theme="dark"] .header-logo-placeholder .logo-fallback{background:#292536;
+border-color:#4a3b65}
+body[data-theme="dark"] .header-logo-placeholder .logo-fallback strong{color:#f1edff}
+body[data-theme="dark"] .mobile-nav{background:#1d1a27;
+border-color:#393348;
+box-shadow:0 -5px 0 #17141e,0 -9px 20px #0004}
+body[data-theme="dark"] .mobile-nav button{color:#aaa3c2}
+body[data-theme="dark"] .mobile-nav button.active{color:#bba6ff}
+body[data-theme="dark"] .day-col{background:#252131;
+border-color:#413951;
+box-shadow:0 5px 0 #17141e,0 9px 15px #0003}
+body[data-theme="dark"] .day-col h3{color:#b8b0ce}
+body[data-theme="dark"] .class-chip{background:#382d50;
+border-color:#51416f;
+color:#d0c1ff}
+body[data-theme="dark"] .class-chip small{color:#b5a4e5}
+body[data-theme="dark"] .toast{background:#7955ed;
+box-shadow:0 5px 0 #4c358d,0 12px 22px #0005}
+body[data-theme="dark"] .footer-note{color:#aaa3c2}
+:root{color-scheme:dark}
+body{background:#17151f!important;
+color:#f1edff!important}
+body .app,body .main{background:#17151f!important}
+body .sidebar{background:#1d1a27!important;
+border-color:#373044!important}
+body .brand{color:#f4f0ff!important}
+body .brand-mark{background:#302744!important;
+border:1px solid #443858!important;
+box-shadow:none!important}
+body .brand-dot{color:#a48aff!important}
+body .card{box-shadow:0 4px 14px #00000018,inset 0 1px 0 #ffffff08!important}
+body .stats .card{box-shadow:0 4px 12px #00000020,inset 0 1px 0 #ffffff10!important}
+body .btn,body button{transform:none;
+transition:background-color .15s,border-color .15s,color .15s,box-shadow .15s}
+body .btn.primary,body .btn.subtle,body .btn.danger,body .section-head .btn,body .status-buttons button,body .tabs button,body .nav button{border-width:1px}
+body .btn.primary{background:#7955ed!important;
+border-color:#8b70ed!important;
+color:#fff!important;
+border-radius:12px!important;
+box-shadow:0 3px 7px #0002,0 0 0 1px #ffffff0a inset!important}
+body .btn.primary:hover{background:#6945dc!important;
+border-color:#a18aff!important;
+box-shadow:0 4px 10px #0003,0 0 0 1px #ffffff12 inset!important;
+transform:translateY(-1px)!important}
+body .btn.subtle,body .section-head .btn{background:#302744!important;
+border-color:#493b61!important;
+color:#d8ccff!important;
+border-radius:12px!important;
+box-shadow:0 2px 6px #0002,0 0 0 1px #ffffff08 inset!important}
+body .btn.subtle:hover,body .section-head .btn:hover{background:#3a304d!important;
+border-color:#65517f!important;
+transform:translateY(-1px)!important;
+box-shadow:0 4px 9px #0003,0 0 0 1px #ffffff0d inset!important}
+body .btn.danger{background:#39232e!important;
+border-color:#5a3547!important;
+color:#ff9ab3!important;
+border-radius:12px!important;
+box-shadow:0 2px 6px #0002,0 0 0 1px #ffffff08 inset!important}
+body .nav button.active{background:#302744!important;
+border-color:#4e3c6b!important;
+color:#c8b6ff!important;
+box-shadow:0 3px 8px #0002,inset 0 1px 0 #ffffff08!important}
+body .nav button:hover{background:#292435!important;
+border-color:#3c334d!important;
+box-shadow:0 2px 6px #0002!important;
+transform:none!important}
+body .row-item,body .side-note,body .day-col,body .table-wrap,body .notice,body .date-chip{box-shadow:0 3px 9px #00000016,inset 0 1px 0 #ffffff08!important;
+}
+body .form-grid input,body .form-grid select,body .form-grid textarea,body .field,body select,body textarea{box-shadow:0 2px 5px #00000012!important;
+}
+body .stats .card:nth-child(1){background:#29213b!important;
+border-color:#48385f!important}
+body .stats .card:nth-child(2){background:#352331!important;
+border-color:#593449!important}
+body .stats .card:nth-child(3){background:#202c3b!important;
+border-color:#354960!important}
+body .stats .card:nth-child(4){background:#352c20!important;
+border-color:#59462d!important}
+body .section-head .btn:active,body .btn:active,body button:active{transform:translateY(0)!important;
+filter:brightness(.97)}
+body .toast{box-shadow:none!important}
+body[data-theme="dark"] .section-head .btn,body[data-theme="dark"] .btn.primary{background:#7955ed!important;
+border:1px solid #8d70f5!important;
+color:#fff!important;
+border-radius:12px!important;
+box-shadow:0 3px 8px #00000024,inset 0 1px 0 #ffffff20!important;
+}
+body[data-theme="dark"] .section-head .btn:hover,body[data-theme="dark"] .btn.primary:hover{background:#6b49dc!important;
+border-color:#a18aff!important;
+box-shadow:0 4px 10px #00000030,inset 0 1px 0 #ffffff24!important;
+transform:translateY(-1px)!important;
+}
+body[data-theme="dark"] .btn.subtle{background:#302744!important;
+border:1px solid #493b61!important;
+color:#d8ccff!important;
+box-shadow:0 2px 6px #00000020,inset 0 1px 0 #ffffff08!important;
+}
+body[data-theme="dark"] .btn.subtle:hover{background:#3a304d!important;
+border-color:#65517f!important;
+box-shadow:0 4px 9px #00000028,inset 0 1px 0 #ffffff0d!important;
+transform:translateY(-1px)!important;
+}
+
+
+</style>
+ </head>
+ <body data-theme="dark">
+  <div class="app">
+   <aside class="sidebar">
+    <div class="sidebar-brand-row">
+     <div class="brand">
+      <span class="brand-mark">
+       <img alt="Orbit icon" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'" src="icon.png"/>
+       <span class="icon-fallback">
+        O
+       </span>
+      </span>
+      orbit
+      <span class="brand-dot">
+       .
+      </span>
+     </div>
+    </div>
+    <div>
+     <div class="eyebrow">
+      Workspace
+     </div>
+     <nav class="nav" id="sideNav">
+      <button class="active" data-view="dashboard">
+       <span class="ico">
+        ◫
+       </span>
+       Overview
+      </button>
+      <button data-view="attendance">
+       <span class="ico">
+        ◷
+       </span>
+       Attendance
+      </button>
+      <button data-view="assignments">
+       <span class="ico">
+        ▤
+       </span>
+       Assignments
+      </button>
+      <button data-view="timetable">
+       <span class="ico">
+        ▦
+       </span>
+       Timetable
+      </button>
+      <button data-view="settings">
+       <span class="ico">
+        ⚙
+       </span>
+       Settings &amp; backup
+      </button>
+     </nav>
+    </div>
+    <div class="side-note">
+     <strong>
+      Small steps, big semester.
+     </strong>
+     Keep your attendance in check and deadlines under control.
+     <div class="sync-status" style="margin-top:12px">
+      <span class="sync-dot" id="syncDot">
+      </span>
+      <span id="syncText">
+       Cloud sync not connected
+      </span>
+     </div>
+    </div>
+    <div class="sidebar-credit">
+     Made with love by
+     <strong>
+      ⌘ Auraverse
+     </strong>
+    </div>
+   </aside>
+   <main class="main">
+    <header class="topbar">
+     <div>
+      <div class="kicker" id="todayLabel">
+       YOUR ACADEMIC SPACE
+      </div>
+      <h1 id="pageTitle">
+       Good evening.
+      </h1>
+     </div>
+     <div class="top-actions">
+      <div class="header-logo-placeholder" id="headerBrandLogo">
+       <img alt="Orbit Student Dashboard logo" onload="this.style.display='block';this.nextElementSibling.style.display='none'" src="logo.png"/>
+       <div class="logo-fallback">
+        <span>
+         PNG LOGO PLACEHOLDER
+        </span>
+        <strong>
+         Orbit
+        </strong>
+       </div>
+      </div>
+     </div>
+    </header>
+    <div class="notice hidden" id="cloudNotice">
+     Cloud sync is not configured yet. Student records are not saved across reloads until you connect Supabase and sign in. Configure cloud sync in Settings for cross-device access.
+    </div>
+    <section class="view active" id="view-dashboard">
+     <div class="grid stats">
+      <article class="card" id="monthlyHomeCard">
+       <div class="stat-label">
+        This month attendance
+       </div>
+       <div class="stat-value" id="statAttendance">
+        &mdash;
+       </div>
+       <div class="stat-foot" id="statAttendanceFoot">
+        Monthly target: 85%
+       </div>
+      </article>
+      <article class="card">
+       <div class="stat-label">
+        Classes today
+       </div>
+       <div class="stat-value" id="statClasses">
+        0
+       </div>
+       <div class="stat-foot" id="statClassesFoot">
+        From your weekly timetable
+       </div>
+      </article>
+      <article class="card">
+       <div class="stat-label">
+        Pending assignments
+       </div>
+       <div class="stat-value" id="statPending">
+        0
+       </div>
+       <div class="stat-foot" id="statPendingFoot">
+        Waiting for submission
+       </div>
+      </article>
+      <article class="card">
+       <div class="stat-label">
+        Due in 7 days
+       </div>
+       <div class="stat-value" id="statDue">
+        0
+       </div>
+       <div class="stat-foot">
+        Plan ahead, stay calm
+       </div>
+      </article>
+     </div>
+     <div class="grid two-col">
+      <article class="card">
+       <div class="section-head">
+        <div>
+         <h2>
+          Today's classes
+         </h2>
+         <p>
+          Mark attendance as you go.
+         </p>
+        </div>
+        <button class="btn subtle" data-goto="attendance">
+         View all
+        </button>
+       </div>
+       <div class="list" id="todayClasses">
+       </div>
+      </article>
+      <article class="card">
+       <div class="section-head">
+        <div>
+         <h2>
+          Deadline radar
+         </h2>
+         <p>
+          Your next submissions.
+         </p>
+        </div>
+        <button class="btn subtle" data-goto="assignments">
+         All tasks
+        </button>
+       </div>
+       <div class="list" id="deadlineList">
+       </div>
+      </article>
+      <article class="card">
+       <div class="section-head">
+        <div>
+         <h2>
+          Monthly subject attendance
+         </h2>
+         <p>
+          Current month &middot; target 85% minimum.
+         </p>
+        </div>
+        <button class="btn subtle" data-goto="attendance">
+         Details
+        </button>
+       </div>
+       <div class="subject-list" id="subjectOverview">
+       </div>
+      </article>
+      <article class="card">
+       <div class="section-head">
+        <div>
+         <h2>
+          Coming up
+         </h2>
+         <p>
+          Upcoming classes on your timetable.
+         </p>
+        </div>
+        <button class="btn subtle" data-goto="timetable">
+         Timetable
+        </button>
+       </div>
+       <div class="list" id="upcomingList">
+       </div>
+      </article>
+     </div>
+    </section>
+    <section class="view" id="view-attendance">
+     <div class="section-head">
+      <div>
+       <h2>
+        Attendance log
+       </h2>
+       <p>
+        Mark each scheduled class and review monthly totals.
+       </p>
+      </div>
+      <button class="btn primary" id="markAllPresent">
+       Mark today's unrecorded as present
+      </button>
+     </div>
+     <div class="tabs" id="attendanceTabs">
+      <button class="active" data-attab="daily">
+       Daily log
+      </button>
+      <button data-attab="monthly">
+       Monthly summary
+      </button>
+      <button data-attab="subjects">
+       By subject
+      </button>
+     </div>
+     <div id="attDaily">
+      <div class="toolbar">
+       <input class="field" id="attDate" type="date"/>
+       <select id="attSubject">
+        <option value="">
+         All subjects
+        </option>
+       </select>
+       <button class="btn subtle" id="loadDay">
+        Load day
+       </button>
+      </div>
+      <div id="attendanceTable">
+      </div>
+     </div>
+     <div class="hidden" id="attMonthly">
+      <div class="toolbar">
+       <input class="field" id="monthPick" type="month"/>
+       <select id="monthSubject">
+        <option value="">
+         All subjects
+        </option>
+       </select>
+      </div>
+      <div id="monthlySummary">
+      </div>
+     </div>
+     <div class="hidden" id="attSubjects">
+      <div id="subjectAttendanceTable">
+      </div>
+     </div>
+    </section>
+    <section class="view" id="view-assignments">
+     <div class="section-head">
+      <div>
+       <h2>
+        Assignment planner
+       </h2>
+       <p>
+        Capture the brief, then keep the due date visible.
+       </p>
+      </div>
+      <button class="btn primary" id="newAssignment">
+       ＋ New assignment
+      </button>
+     </div>
+     <div class="toolbar">
+      <input class="field" id="taskSearch" placeholder="Search assignments&hellip;"/>
+      <select id="taskFilter">
+       <option value="all">
+        All assignments
+       </option>
+       <option value="pending">
+        Pending
+       </option>
+       <option value="submitted">
+        Submitted
+       </option>
+       <option value="overdue">
+        Overdue
+       </option>
+      </select>
+      <select id="taskSubject">
+       <option value="">
+        All subjects
+       </option>
+      </select>
+     </div>
+     <div class="list" id="assignmentList">
+     </div>
+    </section>
+    <section class="view" id="view-timetable">
+     <div class="section-head">
+      <div>
+       <h2>
+        Weekly timetable
+       </h2>
+       <p>
+        Add your recurring classes once. Sessions are generated for each date.
+       </p>
+      </div>
+      <button class="btn primary" id="newClass">
+       ＋ Add class
+      </button>
+     </div>
+     <div class="notice">
+      Tip: set the weekday, time, subject and room. The daily attendance log will use this timetable to create sessions.
+     </div>
+     <div class="weekday" id="timetableGrid">
+     </div>
+     <div style="height:18px">
+     </div>
+     <div class="section-head">
+      <div>
+       <h2>
+        Class schedule entries
+       </h2>
+       <p>
+        Edit or remove recurring sessions.
+       </p>
+      </div>
+     </div>
+     <div class="list" id="classEntries">
+     </div>
+    </section>
+    <section class="view" id="view-settings">
+     <div class="grid two-col">
+      <article class="card">
+       <div class="section-head">
+        <div>
+         <h2>
+          Your profile
+         </h2>
+         <p>
+          Personalize the welcome message.
+         </p>
+        </div>
+       </div>
+       <div class="form-grid">
+        <label class="full">
+         Student name
+         <input autocomplete="name" id="studentName" placeholder="Enter your name"/>
+        </label>
+       </div>
+       <div class="form-actions" style="justify-content:flex-start">
+        <button class="btn primary" id="saveProfile">
+         Save name
+        </button>
+       </div>
+       <div style="height:18px">
+       </div>
+       <div class="section-head">
+        <div>
+         <h2>
+          Subjects
+         </h2>
+         <p>
+          Manage the subjects used across the app.
+         </p>
+        </div>
+        <button class="btn primary" id="newSubject">
+         ＋ Subject
+        </button>
+       </div>
+       <div class="list" id="subjectList">
+       </div>
+      </article>
+      <article class="card">
+       <div class="section-head">
+        <div>
+         <h2>
+          Backup &amp; restore
+         </h2>
+         <p>
+          Export a copy of your academic data.
+         </p>
+        </div>
+       </div>
+       <p class="kicker">
+        Student records are stored in your Supabase account after sign-in. Export a JSON backup periodically as an additional safeguard.
+       </p>
+       <div class="toolbar" style="margin-top:14px">
+        <button class="btn primary" id="exportData">
+         Export backup (.json)
+        </button>
+        <label class="btn subtle" for="importFile">
+         Import backup
+        </label>
+        <input accept=".json,application/json" class="hidden" id="importFile" type="file"/>
+       </div>
+       <div class="footer-note">
+        Student records are stored in Supabase after sign-in. Before connecting, changes remain only in the current page and will be lost on reload.
+       </div>
+      </article>
+      <article class="card" style="grid-column:1/-1">
+       <div class="section-head">
+        <div>
+         <h2>
+          Cloud sync (Supabase)
+         </h2>
+         <p>
+          Optional setup for syncing your data between laptop and phone.
+         </p>
+        </div>
+        <span class="tag yellow" id="cloudState">
+         Not configured
+        </span>
+       </div>
+       <div class="notice">
+        Create a Supabase project, run the SQL schema shown in the setup guide, then paste the project URL and anon key here. Use Row Level Security; never paste a service-role key into a browser app.
+       </div>
+              <div class="form-grid">
+        <label>
+         Supabase project URL
+         <input id="sbUrl" placeholder="https://your-project.supabase.co"/>
+        </label>
+        <label>
+         Supabase anon/public key
+         <input autocomplete="off" id="sbKey" placeholder="eyJ&hellip;"/>
+        </label>
+        <label>
+         Email for sign-in
+         <input id="sbEmail" placeholder="you@example.com" type="email"/>
+        </label>
+        <label>
+         Password
+         <input id="sbPassword" placeholder="At least 8 characters" type="password"/>
+        </label>
+       </div>
+       <div class="form-actions" style="justify-content:flex-start;flex-wrap:wrap">
+        <button class="btn subtle" id="saveCloudConfig">
+         Save cloud config
+        </button>
+        <button class="btn primary" id="cloudSignUp">
+         Create account
+        </button>
+        <button class="btn subtle" id="cloudSignIn">
+         Sign in
+        </button>
+        <button class="btn subtle" id="cloudSync">
+         Sync now
+        </button>
+        <button class="btn danger" id="cloudSignOut">
+         Sign out
+        </button>
+       </div>
+       <div class="footer-note" id="cloudMessage">
+        Cloud sync requires a Supabase project and account. If not configured, the app continues in local-only mode.
+       </div>
+      </article>
+     </div>
+    </section>
+   </main>
+  </div>
+  <nav class="mobile-nav" id="mobileNav">
+   <button class="active" data-view="dashboard">
+    <span class="ico">
+     ◫
+    </span>
+    Home
+   </button>
+   <button data-view="attendance">
+    <span class="ico">
+     ◷
+    </span>
+    Attendance
+   </button>
+   <button data-view="assignments">
+    <span class="ico">
+     ▤
+    </span>
+    Tasks
+   </button>
+   <button data-view="timetable">
+    <span class="ico">
+     ▦
+    </span>
+    Timetable
+   </button>
+   <button data-view="settings">
+    <span class="ico">
+     ⚙
+    </span>
+    Settings
+   </button>
+  </nav>
+  <div class="toast" id="toast">
+  </div>
+  <dialog id="modal" style="background:#fff;color:var(--text);border:1px solid #e9e4f5;border-radius:20px;padding:22px;width:min(560px,calc(100% - 24px));box-shadow:12px 12px 28px #d9d4e8,-8px -8px 22px #fff">
+   <form id="modalForm">
+    <div class="section-head">
+     <div>
+      <h2 id="modalTitle">
+       Add item
+      </h2>
+      <p id="modalDesc">
+       Details
+      </p>
+     </div>
+     <button class="btn subtle" id="closeModal" type="button">
+      ✕
+     </button>
+    </div>
+    <div class="form-grid" id="modalFields">
+    </div>
+    <div class="form-actions">
+     <button class="btn subtle" id="cancelModal" type="button">
+      Cancel
+     </button>
+     <button class="btn primary" type="submit">
+      Save
+     </button>
+    </div>
+   </form>
+  </dialog>
+  <script>
+   const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+
+
+function applyTheme(theme='dark',announce=false){
+  document.body.dataset.theme='dark';
+
+  document.documentElement.style.colorScheme='dark';
+
+}
+function initTheme(){applyTheme('dark')}
+
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+const COLORS=['#a99aff','#9380ef','#b8adff','#7962df','#c2b8ff','#8875dc','#d0c8ff'];
+
+const CONFIG_KEY='orbit-supabase-config-v1';
+
+const todayISO=()=>{const d=new Date();
+return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+
+const plusDays=(iso,n)=>{let d=new Date(iso+'T12:00:00');
+d.setDate(d.getDate()+n);
+return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+
+const dateLabel=iso=>new Date(iso+'T12:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
+
+const timeLabel=t=>t?new Date('2000-01-01T'+t).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}):'Time not set';
+
+const uid=()=>Math.random().toString(36).slice(2,10);
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let state=loadState(),cloudClient=null,cloudUser=null;
+function loadState(){const base=blank();try{base.config=JSON.parse(localStorage.getItem(CONFIG_KEY)||'{}')||{}}catch{}return base}
+function cloudPayload(){return {subjects:state.subjects,classes:state.classes,attendance:state.attendance,assignments:state.assignments,studentName:state.studentName}}
+function applyCloudPayload(payload){const config=state.config||{};state={...blank(),...(payload||{}),config};if(!state.attendance)state.attendance={};if(!Array.isArray(state.subjects))state.subjects=[];if(!Array.isArray(state.classes))state.classes=[];if(!Array.isArray(state.assignments))state.assignments=[];renderAll()}
+function blank(){return {subjects:[],classes:[],attendance:{},assignments:[],config:{},studentName:""}}
+let autoSyncTimer=null,autoSyncBusy=false,autoSyncAgain=false;
+function scheduleAutoSync(){if(!cloudUser||!cloudClient)return;clearTimeout(autoSyncTimer);$('#syncText').textContent='Saving securely to your account…';$('#syncDot').classList.remove('ok');autoSyncTimer=setTimeout(()=>autoSync(),700)}
+async function autoSync(){if(!cloudUser||!cloudClient)return;if(autoSyncBusy){autoSyncAgain=true;return}autoSyncBusy=true;autoSyncAgain=false;$('#syncText').textContent='Syncing…';try{const {data:sessionData}=await cloudClient.auth.getSession();if(!sessionData.session?.user){cloudUser=null;$('#syncText').textContent='Sign in to save online';$('#syncDot').classList.remove('ok');return}const user_id=sessionData.session.user.id;const {error}=await cloudClient.from('student_planner_data').upsert({user_id,payload:cloudPayload(),updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)throw error;$('#syncText').textContent='All changes synced';$('#syncDot').classList.add('ok');if($('#cloudMessage'))$('#cloudMessage').textContent='Your academic data is synced to your account.'}catch(e){$('#syncText').textContent='Sync failed · check connection';$('#syncDot').classList.remove('ok');$('#cloudMessage').textContent='Cloud save failed: '+e.message+' Changes remain in this page until refreshed.'}finally{autoSyncBusy=false;if(autoSyncAgain){autoSyncAgain=false;scheduleAutoSync()}}}
+function save(){if(state.config){try{localStorage.setItem(CONFIG_KEY,JSON.stringify(state.config))}catch{}}renderAll();if(cloudUser&&cloudClient)scheduleAutoSync();else{$('#syncText').textContent='Not saved · sign in to sync';$('#syncDot').classList.remove('ok');if($('#cloudMessage'))$('#cloudMessage').textContent='Sign in to a Supabase account to save your academic data online. Student data is not stored on this device.'}}
+function toast(s){let t=$('#toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
+function subjectName(id){return state.subjects.find(s=>s.id===id)?.name||'Unknown subject'}
+function colorFor(id){let i=state.subjects.findIndex(s=>s.id===id);return COLORS[(i<0?0:i)%COLORS.length]}
+function sessionsFor(date){let day=new Date(date+'T12:00:00').getDay(),out=[];state.classes.filter(c=>Number(c.day)===day).sort((a,b)=>a.start.localeCompare(b.start)).forEach(c=>{let [sh,sm]=c.start.split(':').map(Number),[eh,em]=c.end.split(':').map(Number),start=sh*60+sm,end=eh*60+em;let blocks=Math.max(1,Math.ceil((end-start)/60));for(let i=0;i<blocks;i++){let a=start+i*60,b=Math.min(start+(i+1)*60,end);if(a>=end)break;const fmt=n=>String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0');out.push({...c,date,hourIndex:i,start:fmt(a),end:fmt(b),key:date+'_'+c.id+'_h'+i})}});return out}
+function statusOf(key){return state.attendance[key]||''}
+function classIdFromKey(key){let rest=key.slice(11);let c=state.classes.find(c=>rest===c.id||rest.startsWith(c.id+'_h'));return c?.id||rest}
+function subjectForAttendanceKey(key){const c=state.classes.find(c=>c.id===classIdFromKey(key));return c?.subjectId||null}
+function attendanceTotals(subjectId=null,month=null){let entries=Object.entries(state.attendance).filter(([key,v])=>v&&(!subjectId||subjectForAttendanceKey(key)===subjectId)&&(!month||key.slice(0,7)===month));let conducted=entries.filter(([k,v])=>['present','absent'].includes(v)).length;let attended=entries.filter(([k,v])=>v==='present').length;return {conducted,attended,pct:conducted?attended/conducted*100:null}}
+function allRecordedSessions(){return Object.entries(state.attendance).filter(([k,v])=>['present','absent'].includes(v))}
+function dueDays(task){return Math.ceil((new Date(task.due+'T23:59:59')-new Date(todayISO()+'T00:00:00'))/86400000)}
+function taskStatus(t){if(t.status==='submitted')return 'submitted';return dueDays(t)<0?'overdue':'pending'}
+function dashboardGreeting(){const hour=new Date().getHours();const greeting=hour<12?'Good morning':hour<17?'Good afternoon':'Good evening';return greeting+(state.studentName?', '+state.studentName:'')+'.'}
+function nav(view){$$('.view').forEach(x=>x.classList.toggle('active',x.id==='view-'+view));$$('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));const headerLogo=$('#headerBrandLogo');if(headerLogo)headerLogo.style.display=view==='dashboard'?'flex':'none';const names={dashboard:dashboardGreeting(),attendance:'Attendance, clearly.',assignments:'Nothing slips through.',timetable:'Build your week.',settings:'Make it yours.'};$('#pageTitle').textContent=names[view]||'Orbit';if(view==='attendance')renderAttendance();if(view==='assignments')renderAssignments();if(view==='timetable')renderTimetable();if(view==='settings')renderSettings();window.scrollTo({top:0,behavior:'smooth'})}
+$$('[data-view]').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.view)));$$('[data-goto]').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.goto)));
+
+$('#todayLabel').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}).toUpperCase();
+function refreshHeaderDate(){const now=new Date();$('#todayLabel').textContent=now.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}).toUpperCase();if($('#view-dashboard').classList.contains('active'))$('#pageTitle').textContent=dashboardGreeting()}
+setInterval(refreshHeaderDate,60000);
+function ensureSubjects(){const selects=['#attSubject','#monthSubject','#taskSubject'];selects.forEach(sel=>{if(!$(sel))return;let old=$(sel).value;$(sel).innerHTML='<option value="">All subjects</option>'+state.subjects.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');$(sel).value=old})}
+function renderAll(){ensureSubjects();renderDashboard();if($('#view-attendance').classList.contains('active'))renderAttendance();if($('#view-assignments').classList.contains('active'))renderAssignments();if($('#view-timetable').classList.contains('active'))renderTimetable();if($('#view-settings').classList.contains('active'))renderSettings()}
+function renderDashboard(){
+ let month=todayISO().slice(0,7),t=attendanceTotals(null,month),today=sessionsFor(todayISO()),pending=state.assignments.filter(a=>taskStatus(a)==='pending'),due=state.assignments.filter(a=>taskStatus(a)==='pending'&&dueDays(a)<=7);
+ $('#statAttendance').textContent=t.pct===null?'—':t.pct.toFixed(1)+'%';$('#statAttendanceFoot').textContent=(t.pct===null?'No attendance recorded yet':`${t.attended}/${t.conducted} hours attended`)+` · 85% target`;$('#monthlyHomeCard').classList.toggle('monthly-danger',t.pct!==null&&t.pct<75);$('#monthlyHomeCard').classList.toggle('monthly-warning',t.pct!==null&&t.pct>=75&&t.pct<85);$('#statAttendance').className='stat-value '+(t.pct===null?'':t.pct<75?'red':t.pct<85?'yellow':'green');
+ $('#statClasses').textContent=today.length;$('#statClassesFoot').textContent=today.filter(s=>statusOf(s.key)).length+' of '+today.length+' marked today';
+ $('#statPending').textContent=pending.length;$('#statPendingFoot').textContent=state.assignments.filter(a=>taskStatus(a)==='overdue').length+' overdue';
+ $('#statDue').textContent=due.length;
+  $('#todayClasses').innerHTML=today.length?today.map(s=>{let st=statusOf(s.key);return `<div class="row-item"><span class="dot" style="background:${colorFor(s.subjectId)}"></span><div class="item-main"><strong>${esc(subjectName(s.subjectId))}</strong><small>${timeLabel(s.start)}–${timeLabel(s.end)}${s.room?' · '+esc(s.room):''}</small></div><span class="tag ${st==='present'?'green':st==='absent'?'red':st==='od'?'':'yellow'}">${st?st.toUpperCase():'UNMARKED'}</span></div>`}).join(''):'<div class="empty">No classes on your timetable for today.<br><button class="btn subtle" style="margin-top:10px" data-goto="timetable">Add your weekly timetable</button></div>';
+ let tasks=[...state.assignments].filter(a=>taskStatus(a)!=='submitted').sort((a,b)=>a.due.localeCompare(b.due)).slice(0,4);
+ $('#deadlineList').innerHTML=tasks.length?tasks.map(t=>`<div class="row-item"><span class="dot" style="background:${t.priority==='High'?'var(--red)':t.priority==='Low'?'var(--blue)':'var(--yellow)'}"></span><div class="item-main"><strong>${esc(t.title)}</strong><small>${esc(subjectName(t.subjectId))} · ${dateLabel(t.due)}</small></div><span class="tag ${taskStatus(t)==='overdue'?'red':dueDays(t)<=2?'yellow':''}">${taskStatus(t)==='overdue'?'OVERDUE':dueDays(t)===0?'TODAY':dueDays(t)+'D'}</span></div>`).join(''):'<div class="empty">No pending deadlines. Add an assignment when you get one.</div>';
+ $('#subjectOverview').innerHTML=state.subjects.length?state.subjects.map(s=>{let x=attendanceTotals(s.id,month);return `<div><div class="subject-line"><div><strong>${esc(s.name)}</strong><br><small>${x.conducted?`${x.attended}/${x.conducted} classes attended`:'No classes recorded'}</small></div><span class="pct ${x.pct===null?'':x.pct>=85?'green':x.pct>=75?'yellow':'red'}">${x.pct===null?'—':x.pct.toFixed(1)+'%'}</span></div><div class="progress"><span style="width:${x.pct||0}%;background:${colorFor(s.id)}"></span></div></div>`}).join(''):'<div class="empty">Add subjects in Settings to start tracking.</div>';
+ let upcoming=[];for(let i=1;i<=6;i++)upcoming.push(...sessionsFor(plusDays(todayISO(),i)).map(s=>({...s,date:plusDays(todayISO(),i)})));upcoming=upcoming.slice(0,4);
+ $('#upcomingList').innerHTML=upcoming.length?upcoming.map(s=>`<div class="row-item"><span class="dot" style="background:${colorFor(s.subjectId)}"></span><div class="item-main"><strong>${esc(subjectName(s.subjectId))}</strong><small>${new Date(s.date+'T12:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})} · ${timeLabel(s.start)}</small></div></div>`).join(''):'<div class="empty">Add recurring classes to see your week here.</div>';
+}
+function renderAttendance(){
+ let date=$('#attDate').value||todayISO();$('#attDate').value=date;let subject=$('#attSubject').value;
+ let sessions=sessionsFor(date).filter(s=>!subject||s.subjectId===subject);
+ $('#attendanceTable').innerHTML=sessions.length?`<div class="table-wrap"><table><thead><tr><th>Class</th><th>Hour / room</th><th>Mark attendance</th></tr></thead><tbody>${sessions.map(s=>{let st=statusOf(s.key);return `<tr><td><strong>${esc(subjectName(s.subjectId))}</strong></td><td>Hour ${s.hourIndex+1}: ${timeLabel(s.start)}–${timeLabel(s.end)}<br><span class="kicker">${esc(s.room||'No room set')}</span></td><td><div class="status-buttons">${[['present','Present'],['absent','Absent']].map(([v,l])=>`<button data-mark="${s.key}" data-status="${v}" class="${st===v?'chosen '+v:''}">${l}</button>`).join('')}<button data-mark="${s.key}" title="Clear attendance" aria-label="Clear attendance" data-status="" class="${!st?'chosen':''}">×</button></div></td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">No classes scheduled for this date'+(subject?' and subject.':'.')+' Add classes in Timetable, or choose another date.</div>';
+ $$('[data-mark]').forEach(b=>b.onclick=()=>{if(b.dataset.status)state.attendance[b.dataset.mark]=b.dataset.status;else delete state.attendance[b.dataset.mark];save();renderAttendance()});
+ let month=$('#monthPick').value||todayISO().slice(0,7);$('#monthPick').value=month;
+ let ms=state.subjects.filter(s=>!$('#monthSubject').value||s.id===$('#monthSubject').value).map(s=>{let x=attendanceTotals(s.id,month);return {s,...x}});let total=attendanceTotals(null,month);
+ $('#monthlySummary').innerHTML=`<div class="grid stats"><article class="card ${total.pct!==null&&total.pct<75?'monthly-danger':total.pct!==null&&total.pct<85?'monthly-warning':''}"><div class="stat-label"><span class="risk-icon ${total.pct===null?'':total.pct<75?'danger':total.pct<85?'warning':'safe'}">${total.pct===null?'•':total.pct<75?'!':total.pct<85?'⚠':'✓'}</span>Month attendance · 85% target</div><div class="stat-value">${total.pct===null?'—':total.pct.toFixed(1)+'%'}</div><div class="stat-foot">${total.attended} attended / ${total.conducted} recorded</div></article><article class="card"><div class="stat-label">Classes recorded</div><div class="stat-value">${total.conducted}</div><div class="stat-foot">${month}</div></article></div><div class="card"><div class="section-head"><h2>Subject breakdown</h2></div>${ms.length?ms.map(x=>`<div style="margin:14px 0"><div class="subject-line"><div><strong>${esc(x.s.name)}</strong><br><small>${x.attended} attended · ${x.conducted} recorded</small></div><span class="pct ${x.pct===null?'':x.pct<75?'red':x.pct<85?'yellow':'green'}"><span class="risk-icon ${x.pct===null?'':x.pct<75?'danger':x.pct<85?'warning':'safe'}">${x.pct===null?'•':x.pct<75?'!':x.pct<85?'⚠':'✓'}</span>${x.pct===null?'—':x.pct.toFixed(1)+'%'}</span></div><div class="progress"><span style="width:${x.pct||0}%;background:${colorFor(x.s.id)}"></span></div></div>`).join(''):'<div class="empty">Add subjects to see monthly stats.</div>'}</div>`;
+ $('#subjectAttendanceTable').innerHTML=state.subjects.length?`<div class="table-wrap"><table><thead><tr><th>Subject</th><th>Attended</th><th>Absent</th><th>Attendance</th><th>Target 85%</th></tr></thead><tbody>${state.subjects.map(s=>{let e=allRecordedSessions().filter(([k])=>subjectForAttendanceKey(k)===s.id);let p=e.filter(([k,v])=>v==='present').length,a=e.filter(([k,v])=>v==='absent').length;let pct=e.length?p/e.length*100:null;return `<tr><td><strong>${esc(s.name)}</strong></td><td>${p}</td><td>${a}</td><td class="${pct===null?'':pct>=85?'green':pct>=75?'yellow':'red'}">${pct===null?'—':pct.toFixed(1)+'%'}</td><td>${pct===null?'—':pct>=85?'On target':Math.ceil((.85*e.length-p)/.15)+' hours to target*'}</td></tr>`}).join('')}</tbody></table></div><div class="footer-note">*Assumes all future scheduled hours are attended. Attendance is counted hour by hour; target is 85%.</div>`:'<div class="empty">Add subjects in Settings first.</div>';
+}
+$$('#attendanceTabs button').forEach(b=>b.onclick=()=>{$$('#attendanceTabs button').forEach(x=>x.classList.toggle('active',x===b));['daily','monthly','subjects'].forEach(k=>$('#att'+k[0].toUpperCase()+k.slice(1)).classList.toggle('hidden',k!==b.dataset.attab))});
+$('#attDate').onchange=renderAttendance;$('#attSubject').onchange=renderAttendance;$('#loadDay').onclick=renderAttendance;$('#monthPick').onchange=renderAttendance;$('#monthSubject').onchange=renderAttendance;
+$('#markAllPresent').onclick=()=>{sessionsFor($('#attDate').value||todayISO()).forEach(s=>{if(!state.attendance[s.key])state.attendance[s.key]='present'});save();renderAttendance();toast('Unrecorded classes marked present')};
+function renderAssignments(){let q=$('#taskSearch').value.toLowerCase(),f=$('#taskFilter').value,sub=$('#taskSubject').value;let arr=state.assignments.filter(t=>(!q||(t.title+' '+(t.description||'')).toLowerCase().includes(q))&&(!sub||t.subjectId===sub)&&(f==='all'||f===taskStatus(t)));arr.sort((a,b)=>a.due.localeCompare(b.due));$('#assignmentList').innerHTML=arr.length?arr.map(t=>{let st=taskStatus(t);return `<div class="row-item"><span class="dot" style="background:${st==='submitted'?'var(--green)':st==='overdue'?'var(--red)':'var(--accent)'}"></span><div class="item-main"><strong>${esc(t.title)}</strong><small>${esc(subjectName(t.subjectId))} · Due ${dateLabel(t.due)}</small></div><span class="tag ${st==='overdue'?'red':st==='submitted'?'green':dueDays(t)<=2?'yellow':''}">${st==='submitted'?'SUBMITTED':st==='overdue'?'OVERDUE':dueDays(t)===0?'DUE TODAY':dueDays(t)+' DAYS'}</span>${st!=='submitted'?`<button class="btn primary" data-submit-task="${t.id}">Mark submitted</button>`:''}<button class="btn subtle" data-edit-task="${t.id}">Edit</button></div>`}).join(''):'<div class="empty">No assignments match this view. Add your first deadline.</div>';
+ $$('[data-edit-task]').forEach(b=>b.onclick=()=>openTask(state.assignments.find(t=>t.id===b.dataset.editTask)));$$('[data-submit-task]').forEach(b=>b.onclick=()=>{let t=state.assignments.find(t=>t.id===b.dataset.submitTask);if(t){t.status='submitted';save();toast('Assignment marked submitted')}})}
+$('#taskSearch').oninput=renderAssignments;$('#taskFilter').onchange=renderAssignments;$('#taskSubject').onchange=renderAssignments;
+function renderTimetable(){let grid=$('#timetableGrid');grid.innerHTML=DAYS.slice(1).concat(DAYS[0]).map((day,i)=>{let n=(i+1)%7,classes=state.classes.filter(c=>Number(c.day)===n).sort((a,b)=>a.start.localeCompare(b.start));return `<div class="day-col"><h3>${day.slice(0,3).toUpperCase()}</h3>${classes.length?classes.map(c=>`<div class="class-chip" style="border-left:2px solid ${colorFor(c.subjectId)}">${esc(subjectName(c.subjectId))}<small>${timeLabel(c.start)}</small></div>`).join(''):'<span class="kicker">No classes</span>'}</div>`}).join('');
+ let arr=[...state.classes].sort((a,b)=>Number(a.day)-Number(b.day)||a.start.localeCompare(b.start));$('#classEntries').innerHTML=arr.length?arr.map(c=>`<div class="row-item"><span class="dot" style="background:${colorFor(c.subjectId)}"></span><div class="item-main"><strong>${esc(subjectName(c.subjectId))}</strong><small>${DAYS[Number(c.day)]} · ${timeLabel(c.start)}–${timeLabel(c.end)}${c.room?' · '+esc(c.room):''}</small></div><button class="btn subtle" data-edit-class="${c.id}">Edit</button><button class="btn danger" data-delete-class="${c.id}">Delete</button></div>`).join(''):'<div class="empty">No timetable entries yet. Add your weekly classes to generate daily sessions.</div>';
+ $$('[data-edit-class]').forEach(b=>b.onclick=()=>openClass(state.classes.find(c=>c.id===b.dataset.editClass)));$$('[data-delete-class]').forEach(b=>b.onclick=()=>{if(confirm('Delete this recurring class? Past attendance records will remain.')){state.classes=state.classes.filter(c=>c.id!==b.dataset.deleteClass);save();toast('Class removed')}})}
+function renderSettings(){$('#subjectList').innerHTML=state.subjects.length?state.subjects.map(s=>`<div class="row-item"><span class="dot" style="background:${colorFor(s.id)}"></span><div class="item-main"><strong>${esc(s.name)}</strong><small>${esc(s.code||'No code')}</small></div><button class="btn subtle" data-edit-subject="${s.id}">Edit</button><button class="btn danger" data-delete-subject="${s.id}">Delete</button></div>`).join(''):'<div class="empty">No subjects yet. Create one, then add classes to your timetable.</div>';
+ $$('[data-edit-subject]').forEach(b=>b.onclick=()=>openSubject(state.subjects.find(s=>s.id===b.dataset.editSubject)));$$('[data-delete-subject]').forEach(b=>b.onclick=()=>{let id=b.dataset.deleteSubject;if(confirm('Delete subject? Related timetable entries and assignments will also be removed. Attendance history will remain in the backup but will no longer be associated with a visible subject.')){state.subjects=state.subjects.filter(s=>s.id!==id);state.classes=state.classes.filter(c=>c.subjectId!==id);state.assignments=state.assignments.filter(t=>t.subjectId!==id);save();toast('Subject deleted')}});
+  $('#studentName').value=state.studentName||'';$('#saveProfile').onclick=()=>{state.studentName=$('#studentName').value.trim();save();nav('dashboard');toast('Welcome message updated')};$('#cloudState').textContent=cloudUser?'Signed in':'Not configured';$('#cloudState').className='tag '+(cloudUser?'green':'yellow');$('#sbUrl').value=state.config.url||'';$('#sbKey').value=state.config.key||''}
+function field(name,label,type='text',value='',opts=null,required=true,full=false){let input='';if(type==='select')input=`<select name="${name}" ${required?'required':''}>${opts.map(o=>`<option value="${esc(o.value)}" ${String(o.value)===String(value)?'selected':''}>${esc(o.label)}</option>`).join('')}</select>`;else if(type==='textarea')input=`<textarea name="${name}" rows="3" ${required?'required':''}>${esc(value)}</textarea>`;else input=`<input name="${name}" type="${type}" value="${esc(value)}" ${required?'required':''}>`;return `<label class="${full?'full':''}">${label}${input}</label>`}
+function modal(title,desc,fields,onSave){$('#modalTitle').textContent=title;$('#modalDesc').textContent=desc;$('#modalFields').innerHTML=fields;$('#modal').showModal();$('#modalForm').onsubmit=e=>{e.preventDefault();let data=Object.fromEntries(new FormData(e.target).entries());if(onSave(data)!==false){$('#modal').close();save()}}}
+$('#closeModal').onclick=$('#cancelModal').onclick=()=>$('#modal').close();
+function openSubject(s=null){modal(s?'Edit subject':'Add subject','Subjects are shared by attendance, timetable and assignments.',field('name','Subject name','text',s?.name||'')+field('code','Course code (optional)','text',s?.code||'',null,false),d=>{if(s)Object.assign(s,d);else state.subjects.push({id:uid(),name:d.name.trim(),code:d.code.trim()});toast('Subject saved')})}
+function openClass(c=null){if(!state.subjects.length){toast('Add a subject first in Settings');nav('settings');return}let opts=state.subjects.map(s=>({value:s.id,label:s.name}));modal(c?'Edit recurring class':'Add recurring class','This class repeats every week. Attendance is tracked for each hour of this time block.',field('subjectId','Subject','select',c?.subjectId||state.subjects[0].id,opts)+field('day','Weekday','select',c?.day??1,DAYS.map((d,i)=>({value:i,label:d})))+field('start','Start time','time',c?.start||'09:00')+field('end','End time','time',c?.end||'10:00')+field('room','Room / location','text',c?.room||'',null,false),d=>{if(d.end<=d.start){toast('End time must be after start time');return false}if(c)Object.assign(c,d);else state.classes.push({id:uid(),...d,day:Number(d.day)});toast('Timetable saved')})}
+function openTask(t=null){if(!state.subjects.length){toast('Add a subject first in Settings');nav('settings');return}let opts=state.subjects.map(s=>({value:s.id,label:s.name}));modal(t?'Edit assignment':'New assignment','Add the assignment title, subject and due date.',field('title','Assignment title','text',t?.title||'')+field('subjectId','Subject','select',t?.subjectId||state.subjects[0].id,opts)+field('due','Due date','date',t?.due||todayISO()),d=>{if(t)Object.assign(t,d);else state.assignments.push({id:uid(),...d,status:'pending'});toast('Assignment saved')})}
+$('#newSubject').onclick=()=>openSubject();$('#newClass').onclick=()=>openClass();$('#newAssignment').onclick=()=>openTask();
+$('#exportData').onclick=()=>{let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='orbit-backup-'+todayISO()+'.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exported')};
+$('#importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());if(!d.subjects||!d.classes||!d.attendance||!d.assignments)throw Error();if(confirm('Replace the current in-memory workspace with this backup and sync it to your signed-in cloud account?')){state={...blank(),...d,config:state.config||{}};save();toast('Backup imported')}}catch{toast('That file is not a valid Orbit backup')}e.target.value=''};
+async function loadSupabase(){let url=state.config.url,key=state.config.key;if(!url||!key)return null;if(!window.supabase){await new Promise((resolve,reject)=>{let s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';s.onload=resolve;s.onerror=reject;document.head.appendChild(s)});}return window.supabase.createClient(url,key)}
+$('#saveCloudConfig').onclick=async()=>{state.config.url=$('#sbUrl').value.trim();state.config.key=$('#sbKey').value.trim();localStorage.setItem(CONFIG_KEY,JSON.stringify(state.config));cloudUser=null;cloudClient=null;$('#cloudMessage').textContent='Supabase connection details saved on this device only. Sign in to load student records from the cloud.';await initCloud();toast('Connection config saved locally')};
+async function initCloud(){
+  try{
+    state.config=JSON.parse(localStorage.getItem(CONFIG_KEY)||'{}')||{};
+    if(!state.config.url||!state.config.key){$('#cloudNotice').classList.remove('hidden');$('#syncText').textContent='Cloud sync not connected';$('#syncDot').classList.remove('ok');$('#cloudMessage').textContent='Add the Supabase project URL and anon/public key on this device, then sign in. Only connection settings and the auth session are stored in browser storage; student records are loaded from Supabase.';return}
+    $('#cloudNotice').classList.add('hidden');
+    cloudClient=await loadSupabase();
+    const {data,error}=await cloudClient.auth.getSession();if(error)throw error;
+    cloudUser=data.session?.user||null;
+    if(cloudUser){await loadCloudData();$('#syncText').textContent='Connected · data loaded from cloud';$('#syncDot').classList.add('ok');$('#cloudState').textContent='Signed in';$('#cloudState').className='tag green'}
+    else{$('#syncText').textContent='Sign in to load your data';$('#syncDot').classList.remove('ok');$('#cloudState').textContent='Configured · sign in';$('#cloudState').className='tag yellow';$('#cloudMessage').textContent='Your academic records live in Supabase. Sign in to load them on this device.'}
+  }catch(e){$('#cloudMessage').textContent='Could not initialize Supabase: '+e.message}
+}
+async function loadCloudData(){
+  if(!cloudClient)throw Error('Save your Supabase URL and anon key first.');
+  const {data:sessionData}=await cloudClient.auth.getSession();
+  cloudUser=sessionData.session?.user;if(!cloudUser)throw Error('Sign in first.');
+  const {data,error}=await cloudClient.from('student_planner_data').select('payload,updated_at').eq('user_id',cloudUser.id).maybeSingle();
+  if(error)throw error;
+  if(data?.payload){
+    applyCloudPayload(data.payload);
+    try{localStorage.removeItem('orbit-student-planner-v1')}catch{}
+    $('#cloudMessage').textContent='Loaded your academic data from Supabase. Student records are no longer cached by this app on this device.'
+  }else{
+    let initialPayload=cloudPayload();
+    try{
+      const legacy=localStorage.getItem('orbit-student-planner-v1');
+      if(legacy){
+        const parsed=JSON.parse(legacy);
+        if(confirm('No cloud record exists for this account yet. Upload the older student data saved in this browser to this signed-in account? Choose Cancel to start with an empty cloud workspace.')){
+          initialPayload={subjects:parsed.subjects||[],classes:parsed.classes||[],attendance:parsed.attendance||{},assignments:parsed.assignments||[],studentName:parsed.studentName||''};
+        }
+      }
+    }catch{}
+    const {error:saveError}=await cloudClient.from('student_planner_data').upsert({user_id:cloudUser.id,payload:initialPayload,updated_at:new Date().toISOString()},{onConflict:'user_id'});
+    if(saveError)throw saveError;
+    applyCloudPayload(initialPayload);
+    try{localStorage.removeItem('orbit-student-planner-v1')}catch{}
+    $('#cloudMessage').textContent='Your cloud workspace is ready. Academic records are stored in Supabase, not local browser storage.'
+  }
+}
+async function authAction(action){
+  try{
+    if(!cloudClient)cloudClient=await loadSupabase();
+    if(!cloudClient)throw Error('Enter and save your Supabase URL and anon/public key first.');
+    const email=$('#sbEmail').value.trim(),password=$('#sbPassword').value;
+    if(!email||!password)throw Error('Enter email and password.');
+    const r=action==='up'?await cloudClient.auth.signUp({email,password}):await cloudClient.auth.signInWithPassword({email,password});
+    if(r.error)throw r.error;
+    cloudUser=r.data.user;
+    if(action==='up'&&!r.data.session){$('#cloudMessage').textContent='Account created. Check your email to confirm it, then sign in.';return}
+    await loadCloudData();renderAll();$('#syncText').textContent='All changes synced';$('#syncDot').classList.add('ok');toast(action==='up'?'Account created':'Cloud data loaded');renderSettings();
+  }catch(e){$('#cloudMessage').textContent=e.message;toast('Cloud authentication needs attention')}
+}
+$('#cloudSignUp').onclick=()=>authAction('up');
+$('#cloudSignIn').onclick=()=>authAction('in');
+$('#cloudSignOut').onclick=async()=>{if(cloudClient)await cloudClient.auth.signOut();cloudUser=null;state={...blank(),config:state.config||{}};renderAll();$('#syncText').textContent='Signed out · data remains in cloud';$('#syncDot').classList.remove('ok');renderSettings();toast('Signed out')};
+async function syncCloud(push=true){
+  try{
+    if(!cloudClient)cloudClient=await loadSupabase();
+    if(!cloudClient)throw Error('Save Supabase URL and anon key first.');
+    const {data:sessionData}=await cloudClient.auth.getSession();cloudUser=sessionData.session?.user;
+    if(!cloudUser)throw Error('Sign in first.');
+    if(push){const {error}=await cloudClient.from('student_planner_data').upsert({user_id:cloudUser.id,payload:cloudPayload(),updated_at:new Date().toISOString()},{onConflict:'user_id'});if(error)throw error;$('#cloudMessage').textContent='Sync complete. Your current in-memory data was uploaded to Supabase.'}
+    else await loadCloudData();
+    $('#syncText').textContent='All changes synced';$('#syncDot').classList.add('ok');$('#cloudState').textContent='Signed in';$('#cloudState').className='tag green';
+  }catch(e){$('#cloudMessage').textContent='Sync error: '+e.message+' — check the SQL table and Row Level Security policies.'}
+}
+$('#cloudSync').onclick=()=>syncCloud(true);
+function renderSettingsConfig(){state.config=JSON.parse(localStorage.getItem(CONFIG_KEY)||'{}')||{};if(state.config.url&&state.config.key)initCloud();else $('#cloudNotice').classList.remove('hidden')}
+function init(){initTheme();state.config=JSON.parse(localStorage.getItem(CONFIG_KEY)||'{}')||{};const headerLogo=$('#headerBrandLogo');if(headerLogo)headerLogo.style.display='flex';$('#attDate').value=todayISO();$('#monthPick').value=todayISO().slice(0,7);renderAll();renderSettingsConfig()}
+init();
+  </script>
+ </body>
+</html>
